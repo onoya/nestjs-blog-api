@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DeleteResult } from 'typeorm';
 import { Blog } from './blog.entity';
 import { BlogDto } from './dto/blog.dto';
 
@@ -23,16 +23,16 @@ export class BlogsService {
     }
   }
 
-  async create(blogDto: BlogDto) {
+  async create(blogDto: BlogDto): Promise<Blog> {
     return await this.blogRepository.save(blogDto);
   }
 
-  async update(id: number, blogDto: BlogDto) {
+  async update(id: number, blogDto: BlogDto): Promise<Blog> {
     await this.blogRepository.findOneOrFail(id);
     return await this.blogRepository.save({ ...blogDto, id });
   }
 
-  async delete(id: number) {
+  async delete(id: number): Promise<DeleteResult> {
     await this.blogRepository.findOneOrFail(id);
     return await this.blogRepository.delete(id);
   }
