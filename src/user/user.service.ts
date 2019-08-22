@@ -16,4 +16,11 @@ export class UserService {
     const { password, ...userWithoutPassword } = res;
     return userWithoutPassword;
   }
+
+  async findByEmail(email): Promise<User> {
+    return await this.userRepository.findOne({
+      where: { email },
+      select: ['id', 'password', 'email'],
+    });
+  }
 }
