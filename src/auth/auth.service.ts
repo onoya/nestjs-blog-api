@@ -16,13 +16,21 @@ export class AuthService {
     // TODO: Return JWT
   }
 
-  private async validateCredentials(email: User['email'], password: User['password']) {
+  private async validateCredentials(
+    email: User['email'],
+    password: User['password'],
+  ) {
     try {
       const user = await this.userService.findByEmail(email);
-      const isMatch = await bcrypt.compare(password, user.password);
-      return isMatch;
+      if (!user) {
+        throw new Error('Invalid email');
+      }
+      if (!(await bcrypt.compare(password, user.password))) {
+        throw new Error('Invalid password');
+      }
+      return user;
     } catch (error) {
-      throw new UnauthorizedException('Invalid email or password');
+      throw new UnauthorizedException(error.message || 'Invalid credentials');
     }
   }
 }
