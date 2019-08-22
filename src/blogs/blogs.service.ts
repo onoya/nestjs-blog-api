@@ -15,9 +15,9 @@ export class BlogsService {
     return await this.blogRepository.find();
   }
 
-  async findOne(id: string): Promise<Blog> {
+  async findOne(id: number): Promise<Blog> {
     try {
-      return await this.blogRepository.findOneOrFail(Number(id));
+      return await this.blogRepository.findOneOrFail(id);
     } catch (err) {
       throw new NotFoundException();
     }
@@ -27,12 +27,12 @@ export class BlogsService {
     return await this.blogRepository.save(blogDto);
   }
 
-  async update(id: string, blogDto: BlogDto) {
+  async update(id: number, blogDto: BlogDto) {
     await this.blogRepository.findOneOrFail(id);
-    return await this.blogRepository.save({ ...blogDto, id: Number(id) });
+    return await this.blogRepository.save({ ...blogDto, id });
   }
 
-  async delete(id: string) {
+  async delete(id: number) {
     await this.blogRepository.findOneOrFail(id);
     return await this.blogRepository.delete(id);
   }
