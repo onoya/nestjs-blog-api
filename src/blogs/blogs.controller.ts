@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, ParseIntPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { BlogsService } from './blogs.service';
 import { BlogDto } from './dto/blog.dto';
 
@@ -12,7 +21,7 @@ export class BlogsController {
   }
 
   @Post()
-  create(@Body() dto: BlogDto ) {
+  create(@Body() dto: BlogDto) {
     return this.service.create(dto);
   }
 

@@ -1,13 +1,19 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
-import { UserService } from '../user/user.service';
 import { User } from '../user/user.entity';
+import { UserService } from '../user/user.service';
+import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly userService: UserService) {}
 
-  async register(user: User) {
+  async register(user: RegisterDto) {
     return this.userService.create(user);
   }
 
@@ -23,14 +29,18 @@ export class AuthService {
     try {
       const user = await this.userService.findByEmail(email);
       if (!user) {
-        throw new Error('Invalid email');
+        throw new UnauthorizedException('Invalid email');
       }
       if (!(await bcrypt.compare(password, user.password))) {
-        throw new Error('Invalid password');
+        throw new UnauthorizedException('Invalid password');
       }
+
       return user;
     } catch (error) {
-      throw new UnauthorizedException(error.message || 'Invalid credentials');
+      if (error.status === HttpStatus.UNAUTHORIZED) {
+        throw new UnauthorizedException(error.message);
+      }
+      throw new InternalServerErrorException();
     }
   }
 }

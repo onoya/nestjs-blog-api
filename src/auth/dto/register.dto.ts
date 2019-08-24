@@ -1,8 +1,7 @@
 import { IsEmail, IsNotEmpty } from 'class-validator';
 import { IsEmailTaken } from '../../custom.validation';
-import { User } from '../../user/user.entity';
 
-export class RegisterDto extends User {
+export class RegisterDto {
   @IsNotEmpty()
   readonly firstName: string;
 

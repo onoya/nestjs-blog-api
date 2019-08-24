@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DeleteResult } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { Blog } from './blog.entity';
 import { BlogDto } from './dto/blog.dto';
 
@@ -9,7 +9,7 @@ export class BlogsService {
   constructor(
     @InjectRepository(Blog)
     private readonly blogRepository: Repository<Blog>,
-   ) {}
+  ) {}
 
   async findAll(): Promise<Blog[]> {
     return await this.blogRepository.find();
