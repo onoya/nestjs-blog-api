@@ -4,9 +4,11 @@ import {
   BeforeInsert,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
+import { Post } from '../post/post.entity';
 
 @Entity({ name: 'users' })
 @Unique(['email'])
@@ -15,9 +17,11 @@ export class User {
   id: number;
 
   @Column()
+  @Exclude({ toPlainOnly: true })
   firstName: string;
 
   @Column()
+  @Exclude({ toPlainOnly: true })
   lastName: string;
 
   @Column()
@@ -26,6 +30,9 @@ export class User {
   @Column()
   @Exclude({ toPlainOnly: true })
   password: string;
+
+  @OneToMany(() => Post, post => post.user)
+  posts: Post[];
 
   @Expose()
   get name() {

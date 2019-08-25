@@ -10,6 +10,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { CurrentUser } from '../auth/current-user.decorator';
+import { User } from '../user/user.entity';
 import { PostDto } from './dto/post.dto';
 import { PostService } from './post.service';
 
@@ -24,13 +26,13 @@ export class PostsController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  create(@Body() dto: PostDto) {
-    return this.service.create(dto);
+  create(@Body() dto: PostDto, @CurrentUser() user: User) {
+    return this.service.create(dto, user);
   }
 
   @Get(':id')
   one(@Param('id', ParseIntPipe) id: number) {
-    return this.service.findOne(id);
+    return this.service.findById(id);
   }
 
   @UseGuards(AuthGuard('jwt'))

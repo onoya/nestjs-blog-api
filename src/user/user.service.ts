@@ -11,9 +11,9 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(user: RegisterDto) {
-    const entity = Object.assign(new User(), user);
-    return await this.userRepository.save(entity);
+  async create(userData: RegisterDto) {
+    const user = Object.assign(new User(), userData);
+    return await this.userRepository.save(user);
   }
 
   async findByEmail(email): Promise<User> {
