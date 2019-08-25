@@ -4,6 +4,7 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../user/user.entity';
 import { UserService } from '../user/user.service';
@@ -11,15 +12,20 @@ import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async register(user: RegisterDto) {
     return this.userService.create(user);
   }
 
-  async login(user: Pick<User, 'email' | 'password'>) {
-    return await this.validateCredentials(user.email, user.password);
-    // TODO: Return JWT
+  async login(user: User) {
+    const payload = { sub: user.id };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 
   async validateCredentials(email: User['email'], password: User['password']) {
