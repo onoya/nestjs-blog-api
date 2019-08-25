@@ -10,12 +10,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { BlogsService } from './blogs.service';
-import { BlogDto } from './dto/blog.dto';
+import { PostDto } from './dto/post.dto';
+import { PostService } from './post.service';
 
-@Controller('blogs')
-export class BlogsController {
-  constructor(private readonly service: BlogsService) {}
+@Controller('posts')
+export class PostsController {
+  constructor(private readonly service: PostService) {}
 
   @Get()
   all() {
@@ -24,7 +24,7 @@ export class BlogsController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  create(@Body() dto: BlogDto) {
+  create(@Body() dto: PostDto) {
     return this.service.create(dto);
   }
 
@@ -35,7 +35,7 @@ export class BlogsController {
 
   @UseGuards(AuthGuard('jwt'))
   @Put(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() dto: BlogDto) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() dto: PostDto) {
     return this.service.update(id, dto);
   }
 
