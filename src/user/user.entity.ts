@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcryptjs';
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import {
   BeforeInsert,
   Column,
@@ -27,7 +27,13 @@ export class User {
   @Exclude({ toPlainOnly: true })
   password: string;
 
+  @Expose()
+  get name() {
+    return this.firstName + ' ' + this.lastName;
+  }
+
   @BeforeInsert()
+  @Exclude()
   async hashPassword() {
     if (this.password) {
       const salt = await bcrypt.genSalt(10);
