@@ -22,10 +22,7 @@ export class AuthService {
     // TODO: Return JWT
   }
 
-  private async validateCredentials(
-    email: User['email'],
-    password: User['password'],
-  ) {
+  async validateCredentials(email: User['email'], password: User['password']) {
     try {
       const user = await this.userService.findByEmail(email);
       if (!user) {
